@@ -10,15 +10,19 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = {CpfOrCnpjValidator.class})
+@Constraint(validatedBy = {NaoExisteValidator.class})
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CpfOrCnpj {
+public @interface NaoExiste {
 
-    String message() default "não é um CPF ou CNPJ válido";
+    String message() default "";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
+    Class<?> domainClass();
+
+    String fieldName();
 
 }

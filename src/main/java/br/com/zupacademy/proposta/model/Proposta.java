@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Entity
 public class Proposta {
     @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid2")
     private String id;
     @NotBlank
     @CpfOrCnpj

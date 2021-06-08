@@ -2,6 +2,7 @@ package br.com.zupacademy.proposta.model.request;
 
 import br.com.zupacademy.proposta.model.Proposta;
 import br.com.zupacademy.proposta.validator.CpfOrCnpj;
+import br.com.zupacademy.proposta.validator.NaoExiste;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 public class PropostaRequest {
     @NotBlank
     @CpfOrCnpj
+    @NaoExiste(domainClass = Proposta.class, fieldName = "cpfOuCnpj")
     private final String cpfOuCnpj;
     @NotBlank
     @Email
