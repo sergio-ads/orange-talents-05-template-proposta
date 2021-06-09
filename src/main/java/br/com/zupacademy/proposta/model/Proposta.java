@@ -2,11 +2,13 @@ package br.com.zupacademy.proposta.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,9 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import br.com.zupacademy.proposta.consumer.AnaliseClient;
+import br.com.zupacademy.proposta.consumer.request.AnaliseRequest;
+import br.com.zupacademy.proposta.consumer.response.AnaliseResponse;
 import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
 import br.com.zupacademy.proposta.validator.CpfOrCnpj;
 
@@ -38,6 +43,8 @@ public class Proposta {
     @NotNull
     @Enumerated(EnumType.STRING)
     private ResultadoAvaliacao resultadoAvaliacao;
+	@OneToOne(cascade = CascadeType.MERGE)
+    private Cartao cartao;
 
     @Deprecated
     public Proposta() {
@@ -85,5 +92,19 @@ public class Proposta {
 	public void setResultadoAvaliacao(@NotNull ResultadoAvaliacao resultadoAvaliacao) {
 		this.resultadoAvaliacao = resultadoAvaliacao;
 	}
-    
+
+	public Cartao getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
+	}
+
+	public void buscarResultadoAvaliacao(AnaliseClient analiseClient) {
+		AnaliseResponse analiseResponse = analiseClient.solicitar(new AnaliseRequest(this));		
+		this.setResultadoAvaliacao(analiseResponse.getResultadoSolicitacao());
+	}	
+	
+	
 }

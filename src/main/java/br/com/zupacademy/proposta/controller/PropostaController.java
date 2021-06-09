@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.proposta.consumer.AnaliseClient;
-import br.com.zupacademy.proposta.consumer.request.AnaliseRequest;
 import br.com.zupacademy.proposta.model.Proposta;
 import br.com.zupacademy.proposta.model.dto.PropostaDto;
-import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
 import br.com.zupacademy.proposta.model.request.PropostaRequest;
 import br.com.zupacademy.proposta.repository.PropostaRepository;
 
@@ -51,24 +49,19 @@ public class PropostaController {
     @Transactional
     public ResponseEntity<?> save(@RequestBody @Valid PropostaRequest propostaRequest, UriComponentsBuilder uriBuilder) {
         Proposta proposta = propostaRequest.toModel();
-        propostaRepository.save(proposta);
-        
-		ResultadoAvaliacao resultadoAvaliacao = analiseClient
-				.solicitar(new AnaliseRequest(proposta))
-				.getResultadoSolicitacao();
-		
-		proposta.setResultadoAvaliacao(resultadoAvaliacao);
-        propostaRepository.save(proposta);
+        propostaRepository.save(proposta);        
+        proposta.buscarResultadoAvaliacao(analiseClient);
         
         URI uri = uriBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @DeleteMapping("/{cpfOuCnpj}")
+
+    @DeleteMapping("/{id}")
     @Transactional
-    public void delete(@PathVariable("cpfOuCnpj") String cpfOuCnpj) {
-    	Assert.state(propostaRepository.findByCpfOuCnpj(cpfOuCnpj).isPresent(), "Proposta não localizada");
-        propostaRepository.deleteByCpfOuCnpj(cpfOuCnpj);
+    public void delete(@PathVariable("id") String id) {
+    	Assert.state(propostaRepository.findById(id).isPresent(), "Proposta não localizada");
+        propostaRepository.deleteById(id);
     }
 
 }

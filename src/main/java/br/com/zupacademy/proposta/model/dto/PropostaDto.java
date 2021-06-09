@@ -1,11 +1,11 @@
 package br.com.zupacademy.proposta.model.dto;
 
-import br.com.zupacademy.proposta.model.Proposta;
-import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import br.com.zupacademy.proposta.model.Proposta;
+import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
 
 public class PropostaDto {
     private final String cpfOuCnpj;
@@ -14,6 +14,8 @@ public class PropostaDto {
     private final String endereco;
     private final BigDecimal salario;
     private ResultadoAvaliacao resultadoAvaliacao;
+    private CartaoDto cartao;
+    
 
     public PropostaDto(Proposta proposta) {
         this.cpfOuCnpj = proposta.getCpfOuCnpj();
@@ -22,6 +24,7 @@ public class PropostaDto {
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
         this.resultadoAvaliacao = proposta.getResultadoAvaliacao();
+        this.cartao = new CartaoDto(proposta.getCartao());
     }
 
     public static List<PropostaDto> converter(List<Proposta> propostas) {
@@ -50,6 +53,10 @@ public class PropostaDto {
 
 	public ResultadoAvaliacao getResultadoAvaliacao() {
 		return resultadoAvaliacao;
+	}
+
+	public CartaoDto getCartao() {
+		return cartao;
 	}
 	
 }
