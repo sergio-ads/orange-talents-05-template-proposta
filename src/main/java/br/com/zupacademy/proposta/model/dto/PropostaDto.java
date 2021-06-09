@@ -8,6 +8,7 @@ import br.com.zupacademy.proposta.model.Proposta;
 import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
 
 public class PropostaDto {
+    private final String id;
     private final String cpfOuCnpj;
     private final String email;
     private final String nome;
@@ -18,6 +19,7 @@ public class PropostaDto {
     
 
     public PropostaDto(Proposta proposta) {
+    	this.id = proposta.getId();
         this.cpfOuCnpj = proposta.getCpfOuCnpj();
         this.email = proposta.getEmail();
         this.nome = proposta.getNome();
@@ -31,7 +33,11 @@ public class PropostaDto {
         return propostas.stream().map(PropostaDto::new).collect(Collectors.toList());
     }
 
-    public String getCpfOuCnpj() {
+    public String getId() {
+		return id;
+	}
+
+	public String getCpfOuCnpj() {
         return cpfOuCnpj;
     }
 

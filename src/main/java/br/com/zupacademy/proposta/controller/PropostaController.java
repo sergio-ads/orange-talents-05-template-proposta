@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.proposta.consumer.AnaliseClient;
@@ -41,7 +43,7 @@ public class PropostaController {
     @GetMapping("/{id}")
     public PropostaDto get(@PathVariable("id") String id) {
         Proposta proposta = propostaRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Proposta não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Proposta não encontrada"));
         return new PropostaDto(proposta);
     }
 
