@@ -1,24 +1,38 @@
 package br.com.zupacademy.proposta.controller;
 
-import br.com.zupacademy.proposta.model.Proposta;
-import br.com.zupacademy.proposta.model.dto.PropostaDto;
-import br.com.zupacademy.proposta.model.request.PropostaRequest;
-import br.com.zupacademy.proposta.repository.PropostaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
+import java.util.List;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import br.com.zupacademy.proposta.consumer.AnaliseClient;
+import br.com.zupacademy.proposta.consumer.request.AnaliseRequest;
+import br.com.zupacademy.proposta.model.Proposta;
+import br.com.zupacademy.proposta.model.dto.PropostaDto;
+import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
+import br.com.zupacademy.proposta.model.request.PropostaRequest;
+import br.com.zupacademy.proposta.repository.PropostaRepository;
 
 @RestController
 @RequestMapping(value = "/proposta")
 public class PropostaController {
     @Autowired
     private PropostaRepository propostaRepository;
+    @Autowired
+    private AnaliseClient analiseClient;
 
     @GetMapping
     public List<PropostaDto> list() {
@@ -38,9 +52,23 @@ public class PropostaController {
     public ResponseEntity<?> save(@RequestBody @Valid PropostaRequest propostaRequest, UriComponentsBuilder uriBuilder) {
         Proposta proposta = propostaRequest.toModel();
         propostaRepository.save(proposta);
-
+        
+		ResultadoAvaliacao resultadoAvaliacao = analiseClient
+				.solicitar(new AnaliseRequest(proposta))
+				.getResultadoSolicitacao();
+		
+		proposta.setResultadoAvaliacao(resultadoAvaliacao);
+        propostaRepository.save(proposta);
+        
         URI uri = uriBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @DeleteMapping("/{cpfOuCnpj}")
+    @Transactional
+    public void delete(@PathVariable("cpfOuCnpj") String cpfOuCnpj) {
+    	Assert.state(propostaRepository.findByCpfOuCnpj(cpfOuCnpj).isPresent(), "Proposta não localizada");
+        propostaRepository.deleteByCpfOuCnpj(cpfOuCnpj);
     }
 
 }

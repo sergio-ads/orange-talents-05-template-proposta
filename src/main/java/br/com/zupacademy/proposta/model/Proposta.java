@@ -1,13 +1,21 @@
 package br.com.zupacademy.proposta.model;
 
-import br.com.zupacademy.proposta.validator.CpfOrCnpj;
-import org.hibernate.annotations.GenericGenerator;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
+import br.com.zupacademy.proposta.validator.CpfOrCnpj;
 
 @Entity
 public class Proposta {
@@ -27,20 +35,26 @@ public class Proposta {
     @NotNull
     @PositiveOrZero
     private BigDecimal salario;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ResultadoAvaliacao resultadoAvaliacao;
 
     @Deprecated
     public Proposta() {
     }
 
-    public Proposta(String cpfOuCnpj, String email, String nome, String endereco, BigDecimal salario) {
-        this.cpfOuCnpj = cpfOuCnpj;
-        this.email = email;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.salario = salario;
-    }
+	public Proposta(@NotBlank String cpfOuCnpj, @NotBlank @Email String email, @NotBlank String nome,
+			@NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario,
+			@NotNull ResultadoAvaliacao resultadoAvaliacao) {
+		this.cpfOuCnpj = cpfOuCnpj;
+		this.email = email;
+		this.nome = nome;
+		this.endereco = endereco;
+		this.salario = salario;
+		this.resultadoAvaliacao = resultadoAvaliacao;
+	}
 
-    public String getId() {
+	public String getId() {
         return id;
     }
 
@@ -63,4 +77,13 @@ public class Proposta {
     public BigDecimal getSalario() {
         return salario;
     }
+
+	public ResultadoAvaliacao getResultadoAvaliacao() {
+		return resultadoAvaliacao;
+	}
+
+	public void setResultadoAvaliacao(@NotNull ResultadoAvaliacao resultadoAvaliacao) {
+		this.resultadoAvaliacao = resultadoAvaliacao;
+	}
+    
 }

@@ -3,8 +3,9 @@ package br.com.zupacademy.proposta.validacao;
 import org.springframework.http.HttpStatus;
 
 public class ApiErrorException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
-    private final HttpStatus httpStatus;
+	private final HttpStatus httpStatus;
 
     private final String reason;
 

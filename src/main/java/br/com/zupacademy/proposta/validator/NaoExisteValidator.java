@@ -1,15 +1,16 @@
 package br.com.zupacademy.proposta.validator;
 
-import br.com.zupacademy.proposta.validacao.ApiErrorException;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
+
+import org.springframework.http.HttpStatus;
+
+import br.com.zupacademy.proposta.validacao.ApiErrorException;
 
 public class NaoExisteValidator implements ConstraintValidator<NaoExiste, String> {
 
