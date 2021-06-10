@@ -26,7 +26,7 @@ public class PropostaDto {
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
         this.resultadoAvaliacao = proposta.getResultadoAvaliacao();
-        this.cartao = new CartaoDto(proposta.getCartao());
+        this.cartao = (proposta.getCartao() == null) ? null : new CartaoDto(proposta.getCartao());
     }
 
     public static List<PropostaDto> converter(List<Proposta> propostas) {
