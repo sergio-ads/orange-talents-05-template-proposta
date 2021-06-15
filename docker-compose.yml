@@ -30,9 +30,12 @@ services:
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"
     environment:
+      ACTIVEPROFILE: prod
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
+      KEYCLOAK_ISSUER_URI: http://localhost:18080/auth/realms/nosso-cartao
+      KEYCLOAK_JWKS_URI: http://localhost:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
 
   kafka:
     image: "confluentinc/cp-kafka:5.2.1"
