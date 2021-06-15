@@ -46,6 +46,7 @@
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-actuator</artifactId>
 	    </dependency>
+<<<<<<< HEAD
 	    <dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -54,6 +55,8 @@
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
+=======
+>>>>>>> parent of b89a878 (login via senha)
 
 		<dependency>
 			<groupId>mysql</groupId>

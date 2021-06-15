@@ -20,12 +20,9 @@ services:
     ports:
       - 8080:8080
     environment:
-      ACTIVEPROFILE: prod
       MYSQL_HOST: jdbc:mysql://propostas_mysql:3306/propostas?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false&serverTimezone=America/Sao_Paulo
       APIAVALIACAO_HOST: http://analise:9999/api/solicitacao
       APICARTAO_HOST: http://contas:8888/api/cartoes
-      KEYCLOAK_ISSUER_URI: http://localhost:18080/auth/realms/nosso-cartao
-      KEYCLOAK_JWKS_URI: http://localhost:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
     depends_on:
       - propostas_mysql
   

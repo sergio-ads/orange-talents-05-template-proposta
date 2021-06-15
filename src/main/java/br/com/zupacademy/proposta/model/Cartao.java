@@ -1,16 +1,9 @@
 package br.com.zupacademy.proposta.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import br.com.zupacademy.proposta.repository.BiometriaRepository;
 
 @Entity
 public class Cartao {
@@ -20,17 +13,14 @@ public class Cartao {
 	private String numero;
 	@NotNull
 	private Long limite;
-	
-	@OneToMany(cascade = CascadeType.MERGE)
-	private List<Biometria> biometrias = new ArrayList<>();
-
-	@Deprecated
-	public Cartao() { }
 
 	public Cartao(@NotBlank String numero, @NotNull Long limite) {
 		this.numero = numero;
 		this.limite = limite;
 	}
+
+	@Deprecated
+	public Cartao() { }
 
 	public String getNumero() {
 		return numero;
@@ -39,14 +29,6 @@ public class Cartao {
 	public Long getLimite() {
 		return limite;
 	}
-
-	public List<Biometria> getBiometrias() {
-		return biometrias;
-	}
-
-	public void adicionaBiometria(Biometria biometria, BiometriaRepository biometriaRepository) {
-		biometriaRepository.save(biometria);
-		this.biometrias.add(biometria);
-	}	
+	
 
 }
