@@ -33,7 +33,7 @@ public class BiometriaController {
     private BiometriaRepository biometriaRepository;
     @Autowired
     private CartaoRepository cartaoRepository;
-    
+
     @GetMapping("/{idBiometria}")
     public BiometriaDto get(@PathVariable String idBiometria) {
         Biometria biometria = biometriaRepository.findById(idBiometria)
