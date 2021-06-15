@@ -1,0 +1,33 @@
+version: '3'
+services:
+    propostas_mysql:
+        restart: always
+        container_name: propostas_mysql
+        image: mysql:8
+        network_mode: bridge
+        environment:
+            MYSQL_ROOT_PASSWORD: Root@12345
+            MYSQL_DATABASE: propostas
+            MYSQL_ROOT_HOST: '%'
+        expose:
+            - "3306"
+        ports:
+            - 3306:3306
+    propostas_api:
+        container_name: propostas_api
+        image: propostas_api:latest
+        restart: on-failure
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        expose:
+            - "8080"
+        ports:
+            - 8080:8080
+        links:
+            - propostas_mysql
+        network_mode: bridge
+        environment:
+            MYSQL_DB_HOST: jdbc:mysql://propostas_mysql:3306/propostas?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false&serverTimezone=America/Sao_Paulo
+        depends_on:
+            - propostas_mysql

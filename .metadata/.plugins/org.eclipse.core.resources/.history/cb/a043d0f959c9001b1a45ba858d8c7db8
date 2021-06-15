@@ -1,0 +1,25 @@
+package br.com.zupacademy.proposta.consumer.response;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+public class CartoesResponse {
+	@NotBlank
+	private String id;
+	@NotNull
+	private Long limite;
+	
+	public CartoesResponse(String id, Long limite) {
+		this.id = id;
+		this.limite = limite;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Long getLimite() {
+		return limite;
+	}
+
+}

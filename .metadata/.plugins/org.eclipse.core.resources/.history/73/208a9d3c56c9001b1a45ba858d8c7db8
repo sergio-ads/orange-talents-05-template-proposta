@@ -1,0 +1,24 @@
+package br.com.zupacademy.proposta.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import br.com.zupacademy.proposta.validator.NaoExiste;
+
+@Entity
+public class Cartao {
+
+	@Id
+	@NaoExiste(domainClass = Cartao.class, fieldName = "numero")
+	private String numero;
+
+	public Cartao(String numero) {
+		this.numero = numero;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+	
+
+}

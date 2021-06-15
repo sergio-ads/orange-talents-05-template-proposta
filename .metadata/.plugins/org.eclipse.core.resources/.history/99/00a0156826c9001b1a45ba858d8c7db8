@@ -1,0 +1,5 @@
+package br.com.zupacademy.proposta.model.enums;
+
+public enum ResultadoAvaliacao {
+	COM_RESTRICAO, SEM_RESTRICAO
+}

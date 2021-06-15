@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\pedagiosolidario"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\pedagio"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\orange-talents-05-template-proposta"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\orange-talents-05-template-mercado-livre"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\orange-talents-05-template-casa-do-codigo"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\teste-solid"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\spring-testes-deploy"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\springapi-projetofinal"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\spring-admin"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\spring-jwt"/>
+			<item value="C:\Users\Sergio.Andrade\eclipse-workspace\spring-api-rest"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="org.eclipse.m2e.core.pom.overview">
+	</section>
+	<section name="org.eclipse.m2e.core.pom.dependencies">
+	</section>
+</section>

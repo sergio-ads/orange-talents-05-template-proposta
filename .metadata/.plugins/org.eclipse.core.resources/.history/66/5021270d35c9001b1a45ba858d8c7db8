@@ -1,0 +1,12 @@
+# datasource
+spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+spring.datasource.url=${MYSQL_DB_HOST}
+spring.datasource.username=root
+spring.datasource.password=Root@12345
+
+# jpa
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+# API Avaliação
+apiAvaliacao.host=http://localhost:9999/api/solicitacao

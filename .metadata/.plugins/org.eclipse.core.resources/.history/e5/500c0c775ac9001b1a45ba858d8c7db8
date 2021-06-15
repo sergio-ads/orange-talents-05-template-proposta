@@ -1,0 +1,37 @@
+package br.com.zupacademy.proposta.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import br.com.zupacademy.proposta.validator.NaoExiste;
+
+@Entity
+public class Cartao {
+
+	@Id
+	@NotBlank
+	@NaoExiste(domainClass = Cartao.class, fieldName = "numero")
+	private String numero;
+	@NotNull
+	private Long limite;
+
+	public Cartao(@NotBlank String numero, @NotNull Long limite) {
+		this.numero = numero;
+		this.limite = limite;
+	}
+
+	@Deprecated
+	public Cartao() { }
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public Long getLimite() {
+		return limite;
+	}
+	
+
+}

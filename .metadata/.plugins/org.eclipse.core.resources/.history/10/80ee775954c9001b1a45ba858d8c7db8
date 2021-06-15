@@ -1,0 +1,10 @@
+package br.com.zupacademy.proposta.model;
+
+import javax.persistence.Entity;
+
+@Entity
+public class Cartao {
+
+	private String numero;
+	
+}

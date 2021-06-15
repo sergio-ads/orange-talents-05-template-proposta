@@ -1,0 +1,5 @@
+package br.com.zupacademy.proposta.model.dto;
+
+public class BiometriaDto {
+
+}

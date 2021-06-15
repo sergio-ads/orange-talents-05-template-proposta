@@ -1,0 +1,17 @@
+package br.com.zupacademy.proposta.consumer;
+
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import br.com.zupacademy.proposta.consumer.request.ResultadoAnaliseResponse;
+
+@FeignClient(value = "apiAvaliacao", url = "${apiAvaliacao.host}")
+public interface AvaliacaoClient {
+
+	@PostMapping
+	ResultadoAnaliseResponse solicitar(@RequestParam @NotBlank String documento, @RequestParam String nome, @RequestParam String idProposta);
+	
+}

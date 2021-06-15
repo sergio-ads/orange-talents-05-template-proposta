@@ -1,0 +1,5 @@
+package br.com.zupacademy.proposta.consumer.enums;
+
+public class ResultadoAnalise {
+
+}

@@ -1,0 +1,75 @@
+package br.com.zupacademy.proposta.model;
+
+import br.com.zupacademy.proposta.model.enums.ResultadoSolicitacao;
+import br.com.zupacademy.proposta.validator.CpfOrCnpj;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
+
+@Entity
+public class Proposta {
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid2")
+    private String id;
+    @NotBlank
+    @CpfOrCnpj
+    private String cpfOuCnpj;
+    @NotBlank
+    @Email
+    private String email;
+    @NotBlank
+    private String nome;
+    @NotBlank
+    private String endereco;
+    @NotNull
+    @PositiveOrZero
+    private BigDecimal salario;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ResultadoSolicitacao resultadoSolicitacao;
+
+    @Deprecated
+    public Proposta() {
+    }
+
+	public Proposta(@NotBlank String cpfOuCnpj, @NotBlank @Email String email, @NotBlank String nome,
+			@NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario,
+			@NotNull ResultadoSolicitacao resultadoSolicitacao) {
+		this.cpfOuCnpj = cpfOuCnpj;
+		this.email = email;
+		this.nome = nome;
+		this.endereco = endereco;
+		this.salario = salario;
+		this.resultadoSolicitacao = resultadoSolicitacao;
+	}
+
+	public String getId() {
+        return id;
+    }
+
+    public String getCpfOuCnpj() {
+        return cpfOuCnpj;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
+    }
+}

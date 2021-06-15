@@ -1,0 +1,37 @@
+package br.com.zupacademy.proposta.consumer.request;
+
+import javax.validation.constraints.NotNull;
+
+import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
+
+public class ResultadoAnaliseRequest {
+
+	private String documento;
+	private String nome;
+	@NotNull
+	private ResultadoAvaliacao resultadoSolicitacao;
+	private String idProposta;
+	
+	public ResultadoAnaliseRequest(String documento, String nome, @NotNull ResultadoAvaliacao resultadoSolicitacao,
+			String idProposta) {
+		this.documento = documento;
+		this.nome = nome;
+		this.resultadoSolicitacao = resultadoSolicitacao;
+		this.idProposta = idProposta;
+	}
+	
+	
+	public String getDocumento() {
+		return documento;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public ResultadoAvaliacao getResultadoSolicitacao() {
+		return resultadoSolicitacao;
+	}
+	public String getIdProposta() {
+		return idProposta;
+	}
+	
+}
