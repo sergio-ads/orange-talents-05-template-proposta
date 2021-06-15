@@ -1,8 +1,0 @@
-package br.com.zupacademy.proposta.consumer.enums;
-
-public enum ResultadoAnalise {
-
-	COM_RESTRICAO, SEM_RESTRICAO
-	
-	public abstract ResultadoAnalise converte(String resultadoSolicitacao);
-}

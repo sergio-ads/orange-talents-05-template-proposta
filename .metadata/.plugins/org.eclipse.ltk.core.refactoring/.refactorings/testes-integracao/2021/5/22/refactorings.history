@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Convert local variable &apos;br.com.caelum.pm73.dao.UsuarioDaoTests.setUp().usuarioDao&apos; in &apos;br.com.caelum.pm73.dao.UsuarioDaoTests.setUp()&apos; to field&#x0D;&#x0A;- Original project: &apos;testes-integracao&apos;&#x0D;&#x0A;- Original element: &apos;br.com.caelum.pm73.dao.UsuarioDaoTests.setUp().usuarioDao&apos;&#x0D;&#x0A;- Field name: &apos;usuarioDao&apos;&#x0D;&#x0A;- Initialize field in method&#x0D;&#x0A;- Declared visibility: &apos;private&apos;" description="Convert local variable &apos;usuarioDao&apos; to field" final="false" flags="2" id="org.eclipse.jdt.ui.promote.temp" initialize="1" input="/test&lt;br.com.caelum.pm73.dao{UsuarioDaoTests.java" name="usuarioDao" selection="396 36" stamp="1621964980974" static="false" version="1.0" visibility="2"/>
-</session>

@@ -1,9 +1,0 @@
-# datasource
-spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
-spring.datasource.url=jdbc:mysql://localhost:3306/propostas?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=America/Sao_Paulo
-spring.datasource.username=root
-spring.datasource.password=Root@12345
-
-# jpa
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-spring.jpa.hibernate.ddl-auto=update
