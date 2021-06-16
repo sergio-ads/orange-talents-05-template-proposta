@@ -43,7 +43,7 @@ public class CartaoController {
     	
     	Bloqueio bloqueio = new Bloqueio(request);
     	cartao.adicionaBloqueio(bloqueio, cartaoRepository);    	
-    	cartao.notificarSistemaLegado(cartaoClient, cartaoRepository);
+    	cartao.notificarSistemaBloqueio(cartaoClient, cartaoRepository);
     }
 
     @Transactional
@@ -54,7 +54,7 @@ public class CartaoController {
     			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Cartão não encontrado"));
     	    	
     	Viagem viagem = viagemRequest.toModel(request, cartao);
-    	viagemRepository.save(viagem);
+    	cartao.notificarSistemaViagem(cartaoClient, viagem, viagemRepository);
     }
 	
 }

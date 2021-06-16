@@ -15,9 +15,11 @@ import javax.validation.constraints.NotNull;
 
 import br.com.zupacademy.proposta.consumer.CartaoClient;
 import br.com.zupacademy.proposta.consumer.request.CartaoBloqueioRequest;
+import br.com.zupacademy.proposta.consumer.request.CartaoViagemRequest;
 import br.com.zupacademy.proposta.model.enums.StatusBloqueioCartao;
 import br.com.zupacademy.proposta.repository.BiometriaRepository;
 import br.com.zupacademy.proposta.repository.CartaoRepository;
+import br.com.zupacademy.proposta.repository.ViagemRepository;
 
 @Entity
 public class Cartao {
@@ -74,12 +76,17 @@ public class Cartao {
 //		this.bloqueio = null;
 //	}
 
-	public void notificarSistemaLegado(CartaoClient cartaoClient, CartaoRepository cartaoRepository) {
+	public void notificarSistemaBloqueio(CartaoClient cartaoClient, CartaoRepository cartaoRepository) {
 		StatusBloqueioCartao status = cartaoClient.bloquear(this.numero, new CartaoBloqueioRequest("Propostas_API")).getResultado();		
 		if(status.equals(StatusBloqueioCartao.BLOQUEADO)) {
 			this.bloqueado = StatusBloqueioCartao.BLOQUEADO;
 			cartaoRepository.save(this);			
 		}
+	}	
+
+	public void notificarSistemaViagem(CartaoClient cartaoClient, Viagem viagem, ViagemRepository viagemRepository) {
+		cartaoClient.viagem(numero, new CartaoViagemRequest(viagem.getDestino(), viagem.getDataTermino()));
+    	viagemRepository.save(viagem);
 	}	
 
 }
