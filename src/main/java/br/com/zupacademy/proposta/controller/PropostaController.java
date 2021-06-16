@@ -1,12 +1,13 @@
 package br.com.zupacademy.proposta.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -25,20 +26,43 @@ import br.com.zupacademy.proposta.model.Proposta;
 import br.com.zupacademy.proposta.model.dto.PropostaDto;
 import br.com.zupacademy.proposta.model.request.PropostaRequest;
 import br.com.zupacademy.proposta.repository.PropostaRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Timer;
 
 @RestController
 @RequestMapping(value = "/proposta")
 public class PropostaController {
-    @Autowired
     private PropostaRepository propostaRepository;
-    @Autowired
     private AnaliseClient analiseClient;
+	private MeterRegistry meterRegistry;
 
-    @GetMapping
+	public PropostaController(PropostaRepository propostaRepository, AnaliseClient analiseClient,
+			MeterRegistry meterRegistry) {
+		this.propostaRepository = propostaRepository;
+		this.analiseClient = analiseClient;
+		this.meterRegistry = meterRegistry;
+	}
+
+	@GetMapping
     public List<PropostaDto> list() {
-        List<Proposta> propostas = propostaRepository.findAll();
-        return PropostaDto.converter(propostas);
+    	return listWithMetrics();
     }
+	
+	private List<PropostaDto> listWithMetrics() {
+    	Collection<Tag> tags = new ArrayList<>();
+    	tags.add(Tag.of("emissora", "Mastercard"));
+    	tags.add(Tag.of("banco", "Itaú"));
+
+    	Timer timerConsultarProposta = this.meterRegistry.timer("consultar_proposta", tags);
+    	return timerConsultarProposta.record(() -> {
+    	    // Método do controller
+    		List<Proposta> propostas = propostaRepository.findAll();
+    		return PropostaDto.converter(propostas);
+    		// Fim método do controller
+    	});
+	}
 
     @GetMapping("/{id}")
     public PropostaDto get(@PathVariable("id") String id) {
@@ -50,14 +74,28 @@ public class PropostaController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@RequestBody @Valid PropostaRequest propostaRequest, UriComponentsBuilder uriBuilder) {
-        Proposta proposta = propostaRequest.toModel();
+    	return saveWithMetrics(propostaRequest, uriBuilder);
+    }
+    
+    private ResponseEntity<?> saveWithMetrics(PropostaRequest propostaRequest, UriComponentsBuilder uriBuilder) {
+	    Collection<Tag> tags = new ArrayList<>();
+	    tags.add(Tag.of("emissora", "Mastercard"));
+	    tags.add(Tag.of("banco", "Itaú"));
+
+	    Counter contadorDePropostasCriadas = this.meterRegistry.counter("proposta_criada", tags);
+	    
+	    // Método do controller
+	    Proposta proposta = propostaRequest.toModel();
         propostaRepository.save(proposta);        
         proposta.buscarResultadoAvaliacao(analiseClient);
         
         URI uri = uriBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
-        return ResponseEntity.created(uri).build();
-    }
-
+        ResponseEntity<?> buildReturn = ResponseEntity.created(uri).build();
+        // Fim método do controller
+	    
+	    contadorDePropostasCriadas.increment();
+	    return buildReturn;
+	}
 
     @DeleteMapping("/{id}")
     @Transactional
