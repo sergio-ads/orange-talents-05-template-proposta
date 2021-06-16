@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.zupacademy.proposta.consumer.CartaoClient;
 import br.com.zupacademy.proposta.model.Bloqueio;
 import br.com.zupacademy.proposta.model.Cartao;
 import br.com.zupacademy.proposta.repository.CartaoRepository;
@@ -20,6 +21,8 @@ import br.com.zupacademy.proposta.repository.CartaoRepository;
 public class CartaoController {
     @Autowired
     private CartaoRepository cartaoRepository;
+    @Autowired
+    private CartaoClient cartaoClient;
 
     @Transactional
     @PostMapping("/{idCartao}/bloquear")
@@ -32,7 +35,8 @@ public class CartaoController {
     		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cartão já está bloqueado");
     	
     	Bloqueio bloqueio = new Bloqueio(request);
-    	cartao.adicionaBloqueio(bloqueio, cartaoRepository);
+    	cartao.adicionaBloqueio(bloqueio, cartaoRepository);    	
+    	cartao.notificarSistemaLegado(cartaoClient, cartaoRepository);
     }
 	
 }

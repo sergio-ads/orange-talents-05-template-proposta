@@ -1,5 +1,9 @@
 package br.com.zupacademy.proposta.validacao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,12 +16,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import feign.FeignException;
 
 @RestControllerAdvice
 public class MyHandlerAdvice {
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErroPadronizado> handle(FeignException exception) {
+        Collection<String> mensagens = new ArrayList<>();
+        mensagens.add(exception.getLocalizedMessage());
+        
+        ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
+        return ResponseEntity.status(exception.status()).body(erroPadronizado);
+    }
 
     @ExceptionHandler(ApiErrorException.class)
     public ResponseEntity<ErroPadronizado> handle(ApiErrorException apiErrorException) {
