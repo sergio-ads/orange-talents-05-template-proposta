@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -49,8 +51,26 @@ public class MyHandlerAdvice {
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ErroPadronizado handle(ConstraintViolationException exception) {
+        Collection<String> mensagens = new ArrayList<>();
+        exception.getConstraintViolations().forEach(ex -> mensagens.add(ex.getMessage()));
+
+        return new ErroPadronizado(mensagens);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalStateException.class)
     public ErroPadronizado handle(IllegalStateException exception) {
+        Collection<String> mensagens = new ArrayList<>();
+        mensagens.add(exception.getLocalizedMessage());
+
+        return new ErroPadronizado(mensagens);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErroPadronizado handle(IllegalArgumentException exception) {
         Collection<String> mensagens = new ArrayList<>();
         mensagens.add(exception.getLocalizedMessage());
 

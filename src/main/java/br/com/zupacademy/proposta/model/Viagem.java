@@ -29,6 +29,9 @@ public class Viagem {
 	@ManyToOne
 	private Cartao cartao;
 	
+	@Deprecated
+	public Viagem() { }
+	
 	public Viagem(@NotBlank String destino, @NotNull @Future LocalDate dataTermino, String ip, String userAgent,
 			Cartao cartao) {
 		this.destino = destino;

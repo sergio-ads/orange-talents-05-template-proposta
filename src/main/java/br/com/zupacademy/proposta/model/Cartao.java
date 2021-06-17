@@ -20,7 +20,7 @@ import br.com.zupacademy.proposta.consumer.request.CartaoViagemRequest;
 import br.com.zupacademy.proposta.model.enums.StatusBloqueioCartao;
 import br.com.zupacademy.proposta.repository.BiometriaRepository;
 import br.com.zupacademy.proposta.repository.CartaoRepository;
-import br.com.zupacademy.proposta.repository.PaypalRepository;
+import br.com.zupacademy.proposta.repository.CarteiraRepository;
 import br.com.zupacademy.proposta.repository.ViagemRepository;
 
 @Entity
@@ -38,8 +38,8 @@ public class Cartao {
 	private Bloqueio bloqueio = null;
 	@Enumerated(EnumType.STRING)
 	private StatusBloqueioCartao bloqueado = StatusBloqueioCartao.ATIVO;
-	@OneToOne(mappedBy = "cartao")
-	private Paypal paypal = null;
+	@OneToMany(mappedBy = "cartao")
+	private List<Carteira> carteiras = new ArrayList<>();
 	@OneToOne(mappedBy = "cartao")
     private Proposta proposta;
 
@@ -75,8 +75,8 @@ public class Cartao {
 		return bloqueado;
 	}
 
-	public Paypal getPaypal() {
-		return paypal;
+	public List<Carteira> getCarteiras() {
+		return carteiras;
 	}
 
 	public void adicionaBiometria(Biometria biometria, BiometriaRepository biometriaRepository) {
@@ -107,9 +107,9 @@ public class Cartao {
     	viagemRepository.save(viagem);
 	}
 
-	public void notificarSistemaCarteira(CartaoClient cartaoClient, Paypal paypal, PaypalRepository paypalRepository, String carteira) {
-		cartaoClient.carteira(this.numero, new CartaoCarteiraRequest(paypal.getEmail(), carteira));
-    	paypalRepository.save(paypal);
+	public void notificarSistemaCarteira(CartaoClient cartaoClient, Carteira carteira, CarteiraRepository carteiraRepository) {
+		cartaoClient.carteira(this.numero, new CartaoCarteiraRequest(carteira.getEmail(), carteira.getNomeCarteira()));
+		carteiraRepository.save(carteira);
 	}	
 
 }

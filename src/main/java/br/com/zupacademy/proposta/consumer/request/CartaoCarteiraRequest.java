@@ -1,10 +1,12 @@
 package br.com.zupacademy.proposta.consumer.request;
 
+import br.com.zupacademy.proposta.model.enums.NomeCarteira;
+
 public class CartaoCarteiraRequest {
 	private String email;
-	private String carteira;
+	private NomeCarteira carteira;
 	
-	public CartaoCarteiraRequest(String email, String carteira) {
+	public CartaoCarteiraRequest(String email, NomeCarteira carteira) {
 		this.email = email;
 		this.carteira = carteira;
 	}
@@ -13,7 +15,7 @@ public class CartaoCarteiraRequest {
 		return email;
 	}
 
-	public String getCarteira() {
+	public NomeCarteira getCarteira() {
 		return carteira;
 	}
 	

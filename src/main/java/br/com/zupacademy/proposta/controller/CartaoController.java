@@ -1,6 +1,7 @@
 package br.com.zupacademy.proposta.controller;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -21,12 +22,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.zupacademy.proposta.consumer.CartaoClient;
 import br.com.zupacademy.proposta.model.Bloqueio;
 import br.com.zupacademy.proposta.model.Cartao;
-import br.com.zupacademy.proposta.model.Paypal;
+import br.com.zupacademy.proposta.model.Carteira;
 import br.com.zupacademy.proposta.model.Viagem;
-import br.com.zupacademy.proposta.model.dto.PaypalDto;
+import br.com.zupacademy.proposta.model.dto.CarteiraDto;
+import br.com.zupacademy.proposta.model.request.CarteiraRequest;
 import br.com.zupacademy.proposta.model.request.ViagemRequest;
 import br.com.zupacademy.proposta.repository.CartaoRepository;
-import br.com.zupacademy.proposta.repository.PaypalRepository;
+import br.com.zupacademy.proposta.repository.CarteiraRepository;
 import br.com.zupacademy.proposta.repository.ViagemRepository;
 
 @RestController
@@ -39,10 +41,10 @@ public class CartaoController {
     @Autowired
     private CartaoClient cartaoClient;
     @Autowired
-    private PaypalRepository paypalRepository;
+    private CarteiraRepository carteiraRepository;
 
     @Transactional
-    @PostMapping("/{idCartao}/bloquear")
+    @PostMapping("/bloquear/{idCartao}")
     public void bloquear(@PathVariable String idCartao, HttpServletRequest request) {
     	
     	Cartao cartao = cartaoRepository.findById(idCartao)
@@ -57,7 +59,7 @@ public class CartaoController {
     }
 
     @Transactional
-    @PostMapping("/{idCartao}/viagem")
+    @PostMapping("/viagem/{idCartao}")
     public void avisoViagem(@RequestBody @Valid ViagemRequest viagemRequest, @PathVariable String idCartao, HttpServletRequest request) {
     	
     	Cartao cartao = cartaoRepository.findById(idCartao)
@@ -68,28 +70,33 @@ public class CartaoController {
     }
 
     @Transactional
-    @PostMapping("/{idCartao}/carteira/paypal")
-    public ResponseEntity<?> postCarteiraPaypal(@PathVariable String idCartao, UriComponentsBuilder uriBuilder) {
-    	
-    	Cartao cartao = cartaoRepository.findById(idCartao)
+    @PostMapping("/carteira")
+    public ResponseEntity<?> postCarteira(@Valid CarteiraRequest carteiraRequest,  UriComponentsBuilder uriBuilder) {    	
+    	Cartao cartao = cartaoRepository.findById(carteiraRequest.getIdCartao())
     			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Cartão não encontrado"));
-
-    	if(cartao.getPaypal() != null)
+    	
+    	if(cartao.getCarteiras().stream().anyMatch(carteira -> carteira.getNomeCarteira().name().equals(carteiraRequest.getNomeCarteira())))
     		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cartão já está associado a essa carteira");
+
+		Carteira carteira = carteiraRequest.toModel(cartao.getProposta().getEmail(), cartao);
+		cartao.notificarSistemaCarteira(cartaoClient, carteira, carteiraRepository);
     	
-    	Paypal paypal = new Paypal(cartao.getProposta().getEmail(), cartao);
-    	cartao.notificarSistemaCarteira(cartaoClient, paypal, paypalRepository, "paypal");
-    	
-    	URI uri = uriBuilder.path("/{idCartao}/carteira/paypal").buildAndExpand(cartao.getNumero()).toUri();
+    	URI uri = uriBuilder.path("/carteira/{idCartao}/{nomeCarteira}").buildAndExpand(cartao.getNumero(), carteiraRequest.getNomeCarteira()).toUri();
     	return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("/{idCartao}/carteira/paypal")
-    public PaypalDto getCarteiraPaypal(@PathVariable String idCartao) {    	
+    @GetMapping("/carteira/{idCartao}/{nomeCarteira}")
+    public CarteiraDto getCarteira(@PathVariable String idCartao, @PathVariable String nomeCarteira) {    	
     	Cartao cartao = cartaoRepository.findById(idCartao)
     			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Cartão não encontrado"));
-
-    	return new PaypalDto(cartao.getPaypal());
+    	
+    	Optional<Carteira> provavelCarteira = cartao.getCarteiras()
+    			.stream().filter(carteira -> carteira.getNomeCarteira().name().equals(nomeCarteira)).findFirst();
+    	
+    	if(!provavelCarteira.isPresent())
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"Carteira não encontrada");
+    		
+    	return new CarteiraDto(provavelCarteira.get());   	
     }
 	
 }
