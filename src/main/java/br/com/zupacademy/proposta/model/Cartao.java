@@ -15,10 +15,12 @@ import javax.validation.constraints.NotNull;
 
 import br.com.zupacademy.proposta.consumer.CartaoClient;
 import br.com.zupacademy.proposta.consumer.request.CartaoBloqueioRequest;
+import br.com.zupacademy.proposta.consumer.request.CartaoCarteiraRequest;
 import br.com.zupacademy.proposta.consumer.request.CartaoViagemRequest;
 import br.com.zupacademy.proposta.model.enums.StatusBloqueioCartao;
 import br.com.zupacademy.proposta.repository.BiometriaRepository;
 import br.com.zupacademy.proposta.repository.CartaoRepository;
+import br.com.zupacademy.proposta.repository.PaypalRepository;
 import br.com.zupacademy.proposta.repository.ViagemRepository;
 
 @Entity
@@ -36,6 +38,10 @@ public class Cartao {
 	private Bloqueio bloqueio = null;
 	@Enumerated(EnumType.STRING)
 	private StatusBloqueioCartao bloqueado = StatusBloqueioCartao.ATIVO;
+	@OneToOne(mappedBy = "cartao")
+	private Paypal paypal = null;
+	@OneToOne(mappedBy = "cartao")
+    private Proposta proposta;
 
 	@Deprecated
 	public Cartao() { }
@@ -43,6 +49,10 @@ public class Cartao {
 	public Cartao(@NotBlank String numero, @NotNull Long limite) {
 		this.numero = numero;
 		this.limite = limite;
+	}
+
+	public Proposta getProposta() {
+		return proposta;
 	}
 
 	public String getNumero() {
@@ -59,6 +69,14 @@ public class Cartao {
 
 	public Bloqueio getBloqueio() {
 		return bloqueio;
+	}
+
+	public StatusBloqueioCartao getBloqueado() {
+		return bloqueado;
+	}
+
+	public Paypal getPaypal() {
+		return paypal;
 	}
 
 	public void adicionaBiometria(Biometria biometria, BiometriaRepository biometriaRepository) {
@@ -87,6 +105,11 @@ public class Cartao {
 	public void notificarSistemaViagem(CartaoClient cartaoClient, Viagem viagem, ViagemRepository viagemRepository) {
 		cartaoClient.viagem(numero, new CartaoViagemRequest(viagem.getDestino(), viagem.getDataTermino()));
     	viagemRepository.save(viagem);
+	}
+
+	public void notificarSistemaCarteira(CartaoClient cartaoClient, Paypal paypal, PaypalRepository paypalRepository, String carteira) {
+		cartaoClient.carteira(this.numero, new CartaoCarteiraRequest(paypal.getEmail(), carteira));
+    	paypalRepository.save(paypal);
 	}	
 
 }

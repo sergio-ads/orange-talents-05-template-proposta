@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zupacademy.proposta.consumer.request.CartaoBloqueioRequest;
+import br.com.zupacademy.proposta.consumer.request.CartaoCarteiraRequest;
 import br.com.zupacademy.proposta.consumer.request.CartaoViagemRequest;
 import br.com.zupacademy.proposta.consumer.response.CartaoBloqueioResponse;
 import br.com.zupacademy.proposta.consumer.response.CartaoResponse;
@@ -23,5 +24,8 @@ public interface CartaoClient {
 	
 	@PostMapping("/{idCartao}/avisos")
 	void viagem(@PathVariable String idCartao, @RequestBody CartaoViagemRequest cartaoViagemRequest);
+	
+	@PostMapping("/{idCartao}/carteiras")
+	void carteira(@PathVariable String idCartao, @RequestBody CartaoCarteiraRequest cartaoCarteiraRequest);
 
 }
