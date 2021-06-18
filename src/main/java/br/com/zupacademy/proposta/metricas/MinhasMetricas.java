@@ -32,7 +32,7 @@ public class MinhasMetricas {
         this.meterRegistry.gauge("gauge_propostas", tags, propostas, Collection::size);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 5000)
     public void atualizarGaugePropostas() {
         propostas.clear();
         propostas.addAll(propostaRepository.findAll());
