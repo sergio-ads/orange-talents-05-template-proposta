@@ -11,8 +11,8 @@ services:
     ports:
       - 3306:3306
 
-  propostas_api:
-    image: propostas_api:latest
+  propostas:
+    image: propostas:latest
     restart: on-failure
     build:
       context: ./
@@ -24,9 +24,9 @@ services:
       MYSQL_HOST: jdbc:mysql://propostas_mysql:3306/propostas?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false&serverTimezone=America/Sao_Paulo
       APIAVALIACAO_HOST: http://analise:9999/api/solicitacao
       APICARTAO_HOST: http://contas:8888/api/cartoes
-      KEYCLOAK_ISSUER_URI: http://localhost:18080/auth/realms/nosso-cartao
-      KEYCLOAK_JWKS_URI: http://localhost:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
-      METRICS_APLICACAO: serviço de proposta
+      KEYCLOAK_ISSUER_URI: http://keycloak:18080/auth/realms/nosso-cartao
+      KEYCLOAK_JWKS_URI: http://keycloak:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
+      METRICS_APLICACAO: serviço de propostas
       METRICS_AMBIENTE: desenvolvimento
     depends_on:
       - propostas_mysql
@@ -141,8 +141,9 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
      - prometheus-volume:/etc/prometheus/
-    network_mode: bridge
+#    network_mode: bridge
     ports:
       - "9090:9090"
 
