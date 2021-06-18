@@ -28,6 +28,8 @@ services:
       KEYCLOAK_JWKS_URI: http://keycloak:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
       METRICS_APLICACAO: serviço de propostas
       METRICS_AMBIENTE: desenvolvimento
+      MYCRIPTOKEY: X[MIyMisfbCx2-@?aV7vm9}3CwxD(h;"UW%lrAAiS_bm*a>1pcZ7+RxWxDnn7;y
+      MYCRIPTOSALT: 9e46ee020bda4469
     depends_on:
       - propostas_mysql
   

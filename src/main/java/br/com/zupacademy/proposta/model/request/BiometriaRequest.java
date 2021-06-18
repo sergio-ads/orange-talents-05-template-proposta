@@ -3,6 +3,8 @@ package br.com.zupacademy.proposta.model.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.bouncycastle.util.encoders.Base64;
+
 import br.com.zupacademy.proposta.model.Biometria;
 
 public class BiometriaRequest {
@@ -11,9 +13,9 @@ public class BiometriaRequest {
 	@NotNull
 	private byte[] fingerprint;	
 	
-	public BiometriaRequest(@NotBlank String idCartao, @NotNull byte[] fingerprint) {
+	public BiometriaRequest(@NotBlank String idCartao, @NotNull String fingerprint) {
 		this.idCartao = idCartao;
-		this.fingerprint = fingerprint;
+		this.fingerprint = Base64.decode(fingerprint);
 	}
 
 	public Biometria toModel() {

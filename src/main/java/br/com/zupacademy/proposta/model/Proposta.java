@@ -16,19 +16,19 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import br.com.zupacademy.proposta.compartilhado.MinhaCriptografiaSimetrica;
 import br.com.zupacademy.proposta.consumer.AnaliseClient;
 import br.com.zupacademy.proposta.consumer.request.AnaliseRequest;
 import br.com.zupacademy.proposta.consumer.response.AnaliseResponse;
 import br.com.zupacademy.proposta.model.enums.ResultadoAvaliacao;
-import br.com.zupacademy.proposta.validator.CpfOrCnpj;
 
 @Entity
-public class Proposta {
+public class Proposta {	
     @Id @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid2")
     private String id;
     @NotBlank
-    @CpfOrCnpj
+//    @CpfOrCnpj
     private String cpfOuCnpj;
     @NotBlank
     @Email
@@ -52,8 +52,10 @@ public class Proposta {
 
 	public Proposta(@NotBlank String cpfOuCnpj, @NotBlank @Email String email, @NotBlank String nome,
 			@NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario,
-			@NotNull ResultadoAvaliacao resultadoAvaliacao) {
-		this.cpfOuCnpj = cpfOuCnpj;
+			@NotNull ResultadoAvaliacao resultadoAvaliacao) {		
+		// Criptografa cpfOuCnpj		
+		this.cpfOuCnpj = MinhaCriptografiaSimetrica.encript(cpfOuCnpj);
+		
 		this.email = email;
 		this.nome = nome;
 		this.endereco = endereco;
@@ -66,7 +68,8 @@ public class Proposta {
     }
 
     public String getCpfOuCnpj() {
-        return cpfOuCnpj;
+    	// Descriptografa cpfOuCnpj
+		return MinhaCriptografiaSimetrica.decript(cpfOuCnpj);
     }
 
     public String getEmail() {

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
+import br.com.zupacademy.proposta.compartilhado.MinhaCriptografiaSimetrica;
+
 @Entity
 public class Biometria {
     @Id @GeneratedValue(generator="system-uuid")
@@ -26,7 +28,8 @@ public class Biometria {
 	public Biometria() { }
 	
 	public Biometria(@NotNull byte[] fingerprint) {
-		this.fingerprint = fingerprint;
+		// Criptografa fingerprint
+		this.fingerprint = MinhaCriptografiaSimetrica.encript(fingerprint);
 	}
 
 	public String getId() {
@@ -34,7 +37,8 @@ public class Biometria {
 	}
 
 	public byte[] getFingerprint() {
-		return fingerprint;
+		// Descriptografa fingerprint
+		return MinhaCriptografiaSimetrica.decript(fingerprint);
 	}
 
 	public LocalDateTime getHorarioCriacao() {
